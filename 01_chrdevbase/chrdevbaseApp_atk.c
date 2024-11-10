@@ -1,3 +1,10 @@
+/*
+ * @Date: 2024-11-08
+ * @LastEditors: GoKo Son626
+ * @LastEditTime: 2024-11-10
+ * @FilePath: /01_chrdevbase/chrdevbaseApp_atk.c
+ * @Description: 
+ */
 #include "stdio.h"
 #include "unistd.h"
 #include "sys/types.h"
