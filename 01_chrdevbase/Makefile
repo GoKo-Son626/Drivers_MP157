@@ -1,4 +1,4 @@
-KERNELDIR := /home/goko/linux/Need_of_image/03-kernel_atk/linux-5.4.31
+KERNELDIR := /home/goko/linux/Need_of_image/3-kernel_atk/linux-5.4.31
 CURRENT_PATH := $(shell pwd)
 obj-m := chrdevbase.o
 
