@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-11-10
- * @LastEditors: GoKo Son626
- * @LastEditTime: 2024-11-11
- * @FilePath: /01_chrdevbase/chrdevbaseApp.c
+ * @LastEditors: GoKo-Son626
+ * @LastEditTime: 2024-11-29
+ * @FilePath: /1-STM32MP157/Drivers_MP157/01_chrdevbase/chrdevbaseApp.c
  * @Description: 
  */
 #include "stdio.h"
@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
         }
 
         /* 向字符设备写入数据 */
-        // retvalue = write(fd, "Hello, World!\n", 14);
-        // if (retvalue < 0)
-        // {
-        //         perror("write");
-        //         close(fd);
-        //         return -1;
-        // }
-        // printf("Write data to character device successfully\r\n");
+        retvalue = write(fd, "Hello, World!\n", 14);
+        if (retvalue < 0)
+        {
+                perror("write");
+                close(fd);
+                return -1;
+        }
+        printf("Write data to character device successfully\r\n");
 
         /* 关闭字符设备 */
         retvalue = close(fd);
