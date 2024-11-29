@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-11-11
  * @LastEditors: GoKo-Son626
- * @LastEditTime: 2024-11-11
+ * @LastEditTime: 2024-11-29
  * @FilePath: /1-STM32MP157/Drivers_MP157/02_led/led.c
  * @Description: 
  */
@@ -34,7 +34,6 @@
 #define GPIOI_OSPEEDR      			(GPIOI_BASE + 0x0008)	
 #define GPIOI_PUPDR      			(GPIOI_BASE + 0x000C)	
 #define GPIOI_BSRR      			(GPIOI_BASE + 0x0018)
-
 
 /* 映射后的寄存器虚拟地址指针 */
 static void __iomem *MPU_AHB4_PERIPH_RCC_PI;
