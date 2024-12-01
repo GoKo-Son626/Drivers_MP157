@@ -26,6 +26,14 @@
 #define LEDON           1
 #define LEDOFF           0
 
+/* 映射后的寄存器虚拟地址指针 */
+static void __iomem *MPU_AHB4_PERIPH_RCC_PI;
+static void __iomem *GPIOI_MODER_PI;
+static void __iomem *GPIOI_OTYPER_PI;
+static void __iomem *GPIOI_OSPEEDR_PI;
+static void __iomem *GPIOI_PUPDR_PI;
+static void __iomem *GPIOI_BSRR_PI;
+
 /* dtsled设备结构体 */
 struct dtsled_dev {
         dev_t devid;            /* 设备号 */
@@ -37,7 +45,14 @@ struct dtsled_dev {
 };
 
 struct dtsled_dev dtsled;       /* led设备 */
-
+void led_nnmap(void){
+        iounmap(MPU_AHB4_PERIPH_RCC_PI);
+        iounmap(GPIOI_MODER_PI);
+        iounmap(GPIOI_OTYPER_PI);
+	iounmap(GPIOI_OSPEEDR_PI);
+	iounmap(GPIOI_PUPDR_PI);
+	iounmap(GPIOI_BSRR_PI);
+}
 
 void led_switch(u8 sta) {
         	u32 val = 0;
@@ -52,16 +67,16 @@ void led_switch(u8 sta) {
 	}
 }
 
-static int led_open(struct inode *inode, struct file *filp) {
-        filp->private_data = &newchrled; /* 设置私有数据 */
+static int dtsled_open(struct inode *inode, struct file *filp) {
+        filp->private_data = &dtsled; /* 设置私有数据 */
 	return 0;
 };
 
-static ssize_t led_read(struct file *filp, char __user *buf, size_t cnt, loff_t *offt) {
+static ssize_t dtsled_read(struct file *filp, char __user *buf, size_t cnt, loff_t *offt) {
         return 0;
 }
 
-static ssize_t led_write(struct file *filp, const char *buf, size_t cnt, loff_t *offt) {
+static ssize_t dtsled_write(struct file *filp, const char *buf, size_t cnt, loff_t *offt) {
         int retvalue;
 	unsigned char databuf[1];
 	unsigned char ledstat;
@@ -82,7 +97,7 @@ static ssize_t led_write(struct file *filp, const char *buf, size_t cnt, loff_t 
 	return 0;
 }
 
-static int led_release(struct inode *inode, struct file *filp) {
+static int dtsled_release(struct inode *inode, struct file *filp) {
         return 0;
 }
 
