@@ -15,24 +15,24 @@
 #include <asm/uaccess.h>
 #include <asm/io.h>
 
-#define GPIOLED_CNT			1		  	/* 设备号个数 */
+#define GPIOLED_CNT			1       /* 设备号个数 */
 #define GPIOLED_NAME		"gpioled"	/* 名字 */
-#define LEDOFF 				0			/* 关灯 */
-#define LEDON 				1			/* 开灯 */
+#define LEDOFF 				0	/* 关灯 */
+#define LEDON 				1	/* 开灯 */
 
 /* gpioled设备结构体 */
 struct gpioled_dev{
 	dev_t devid;			/* 设备号 	 */
 	struct cdev cdev;		/* cdev 	*/
-	struct class *class;	/* 类 		*/
-	struct device *device;	/* 设备 	 */
-	int major;				/* 主设备号	  */
-	int minor;				/* 次设备号   */
-	struct device_node	*nd; /* 设备节点 */
+	struct class *class;	        /* 类 		*/
+	struct device *device;	        /* 设备 	 */
+	int major;			/* 主设备号	  */
+	int minor;			/* 次设备号   */
+	struct device_node *nd;         /* 设备节点 */
 	int led_gpio;			/* led所使用的GPIO编号		*/
 };
 
-struct gpioled_dev gpioled;	/* led设备 */
+struct gpioled_dev gpioled;	        /* led设备 */
 
 /*
  * @description		: 打开设备
@@ -107,7 +107,7 @@ static struct file_operations gpioled_fops = {
 	.open = led_open,
 	.read = led_read,
 	.write = led_write,
-	.release = 	led_release,
+	.release = led_release,
 };
 
 /*
@@ -122,7 +122,7 @@ static int __init led_init(void)
 
 	/* 设置LED所使用的GPIO */
 	/* 1、获取设备节点：gpioled */
-	gpioled.nd = of_find_node_by_path("/gpioled");
+        gpioled.nd = of_find_node_by_path("/mp1-gpioled");
 	if(gpioled.nd == NULL) {
 		printk("gpioled node not find!\r\n");
 		return -EINVAL;
@@ -132,9 +132,8 @@ static int __init led_init(void)
 	ret = of_property_read_string(gpioled.nd, "status", &str);
 	if(ret < 0) 
 	    return -EINVAL;
-
 	if (strcmp(str, "okay"))
-        return -EINVAL;
+                return -EINVAL;
     
 	/* 3、获取compatible属性值并进行匹配 */
 	ret = of_property_read_string(gpioled.nd, "compatible", &str);
@@ -142,11 +141,10 @@ static int __init led_init(void)
 		printk("gpioled: Failed to get compatible property\n");
 		return -EINVAL;
 	}
-
-    if (strcmp(str, "alientek,led")) {
-        printk("gpioled: Compatible match failed\n");
-        return -EINVAL;
-    }
+        if (strcmp(str, "alientek,led")) {
+                printk("gpioled: Compatible match failed\n");
+                return -EINVAL;
+        }
 
 	/* 4、 获取设备树中的gpio属性，得到LED所使用的LED编号 */
 	gpioled.led_gpio = of_get_named_gpio(gpioled.nd, "led-gpio", 0);
@@ -158,9 +156,9 @@ static int __init led_init(void)
 
 	/* 5.向gpio子系统申请使用GPIO */
 	ret = gpio_request(gpioled.led_gpio, "LED-GPIO");
-    if (ret) {
-        printk(KERN_ERR "gpioled: Failed to request led-gpio\n");
-        return ret;
+        if (ret) {
+                printk(KERN_ERR "gpioled: Failed to request led-gpio\n");
+                return ret;
 	}
 
 	/* 6、设置PI0为输出，并且输出高电平，默认关闭LED灯 */
