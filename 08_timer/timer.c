@@ -23,7 +23,7 @@
 #define LEDOFF                  0
 #define CLOSE_CMD 		(_IO(0XEF, 0x1))	/* 关闭定时器 */
 #define OPEN_CMD		(_IO(0XEF, 0x2))	/* 打开定时器 */
-#define SETPERIOD_CMD	(_IO(0XEF, 0x3))	/* 设置定时器周期命令 */
+#define SETPERIOD_CMD	        (_IO(0XEF, 0x3))	/* 设置定时器周期命令 */
 
 /* timerdev设备结构体 */
 struct timer_dev{
@@ -61,8 +61,10 @@ static int led_init(void) {
                 ret = -EINVAL;
         }
 
-        if (strcmp(str, "okay") == 0)
+        if (strcmp(str, "okay") != 0){
+                printk("gpioled: status is okay\n");
                 return -EINVAL;
+        }
         
         /* 3、获取compatible属性值并进行匹配 */
 	ret = of_property_read_string(timerdev.nd, "compatible", &str);
@@ -97,6 +99,8 @@ static int led_init(void) {
 		printk("can't set gpio!\r\n");
 		return ret;
 	}
+        
+        printk("Finished led_init\r\n");
 
 	return 0;
 }
@@ -111,6 +115,7 @@ static int timer_open(struct inode *inode, struct file *filp)
         
         ret = led_init();
         if (ret < 0) {
+                printk("led_init failed, ret = %d\n", ret);
                 return ret;
         }
 
@@ -248,8 +253,6 @@ static int __init timer_init(void)
 
         /* 6. 初始化定时器 */
         timer_setup(&timerdev.timer, timer_func, 0);
-        timerdev.timer.expires = jiffies + msecs_to_jiffies(500);
-        add_timer(&timerdev.timer);
 
         return 0;
 	
