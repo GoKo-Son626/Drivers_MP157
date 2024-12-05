@@ -141,7 +141,7 @@ static int __init led_init(void)
 		printk("gpioled: Failed to get compatible property\n");
 		return -EINVAL;
 	}
-        if (strcmp(str, "alientek,led")) {
+        if (strcmp(str, "goku-son, led")) {
                 printk("gpioled: Compatible match failed\n");
                 return -EINVAL;
         }
@@ -227,6 +227,9 @@ free_gpio:
  */
 static void __exit led_exit(void)
 {
+        /* 关闭灯光 */
+        gpio_set_value(gpioled.led_gpio, 1);
+
 	/* 注销字符设备驱动 */
 	cdev_del(&gpioled.cdev);/*  删除cdev */
 	unregister_chrdev_region(gpioled.devid, GPIOLED_CNT); /* 注销设备号 */
