@@ -171,5 +171,5 @@ static void __exit temp_exit(void)
 module_init(temp_init);
 module_exit(temp_exit);
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("ALIENTEK");
+MODULE_AUTHOR("GOKU-SON");
 MODULE_INFO(intree, "Y");
